@@ -1,0 +1,120 @@
+import React, { useState } from 'react';
+import { Send, Code, Eye } from 'lucide-react';
+
+const AssessmentPlatform = () => {
+  const [activeTab, setActiveTab] = useState('html');
+  const [selectedTopic, setSelectedTopic] = useState('');
+  const [htmlCode, setHtmlCode] = useState('');
+  const [cssCode, setCssCode] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [studentName, setStudentName] = useState('');
+  const [studentClass, setStudentClass] = useState('');
+
+  // Topic options
+  const topics = [
+    { id: 'environmental', name: 'Environmental Awareness' },
+    { id: 'technology', name: 'Technology and Innovation' },
+    { id: 'culture', name: 'Cultural Heritage' },
+    { id: 'sports', name: 'Sports and Wellness' },
+    { id: 'science', name: 'Science Discovery' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white border-b shadow-sm p-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-gray-800">Grade 9 HTML/CSS Assessment</h1>
+            <select
+              value={selectedTopic}
+              onChange={(e) => setSelectedTopic(e.target.value)}
+              className="border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+              <option value="">Select a Topic</option>
+              {topics.map(topic => (
+                <option key={topic.id} value={topic.id}>
+                  {topic.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            <Send className="w-4 h-4" />
+            Submit Work
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto p-4">
+        <div className="grid grid-cols-2 gap-4">
+          {/* Editor Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="flex border-b">
+              <button
+                onClick={() => setActiveTab('html')}
+                className={`px-4 py-2 font-medium ${
+                  activeTab === 'html' 
+                    ? 'text-blue-600 border-b-2 border-blue-600' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Code className="w-4 h-4" />
+                  HTML
+                </div>
+              </button>
+              <button
+                onClick={() => setActiveTab('css')}
+                className={`px-4 py-2 font-medium ${
+                  activeTab === 'css' 
+                    ? 'text-blue-600 border-b-2 border-blue-600' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <Code className="w-4 h-4" />
+                  CSS
+                </div>
+              </button>
+            </div>
+            <textarea
+              value={activeTab === 'html' ? htmlCode : cssCode}
+              onChange={(e) => activeTab === 'html' ? setHtmlCode(e.target.value) : setCssCode(e.target.value)}
+              className="w-full h-[calc(100vh-240px)] font-mono text-sm p-4 bg-gray-50 focus:outline-none"
+              spellCheck="false"
+            />
+          </div>
+
+          {/* Preview Section */}
+          <div className="bg-white rounded-lg shadow-sm border">
+            <div className="flex items-center justify-between border-b px-4 py-2">
+              <div className="flex items-center gap-2 font-medium text-gray-800">
+                <Eye className="w-4 h-4" />
+                Preview
+              </div>
+            </div>
+            <div className="h-[calc(100vh-240px)] bg-white">
+              <iframe
+                srcDoc={`
+                  <html>
+                    <style>${cssCode}</style>
+                    <body>${htmlCode}</body>
+                  </html>
+                `}
+                title="preview"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default AssessmentPlatform;
