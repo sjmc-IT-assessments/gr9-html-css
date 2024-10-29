@@ -144,6 +144,13 @@ Your code will be submitted and this action cannot be undone.`);
     setShowModal(false);
   }
 };
+const handleSubmitWithAnimation = () => {
+  setIsSubmitting(true);
+  setTimeout(() => {
+    handleSubmit();
+    setIsSubmitting(false);
+  }, 1000);
+};
 
 const handleModalSubmit = (name, classValue) => {
   setStudentName(name);
@@ -151,96 +158,87 @@ const handleModalSubmit = (name, classValue) => {
   handleSubmitWithAnimation();
 };
 
+// Find your current SubmitModal component and replace it with this bare-bones version
 const SubmitModal = () => {
-  // Local state with simpler structure
-  const [formState, setFormState] = useState({
-    name: studentName || '',
-    class: studentClass || ''
-  });
-
-  // Single handler for both inputs
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormState(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  // Submit handler
-  const handleModalSubmit = (e) => {
-    e.preventDefault(); // Prevent form submission
-    if (formState.name && formState.class) {
-      setStudentName(formState.name);
-      setStudentClass(formState.class);
-      handleSubmitWithAnimation();
-    }
-  };
+  if (!showModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <form onSubmit={handleModalSubmit}>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Submit Your Work</h2>
-            <button
-              type="button"
-              onClick={() => setShowModal(false)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              ×
-            </button>
-          </div>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '8px',
+        width: '90%',
+        maxWidth: '400px'
+      }}>
+        <h2 style={{ marginBottom: '20px' }}>Submit Your Work</h2>
+        
+        <div>
+          <label>
+            Name:
+            <input
+              type="text"
+              onChange={(e) => setStudentName(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px',
+                marginBottom: '10px',
+                border: '1px solid #ccc'
+              }}
+            />
+          </label>
+        </div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block mb-1">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formState.name}
-                onChange={handleChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your full name"
-                autoComplete="off"
-              />
-            </div>
+        <div>
+          <label>
+            Class:
+            <input
+              type="text"
+              onChange={(e) => setStudentClass(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '8px',
+                marginBottom: '20px',
+                border: '1px solid #ccc'
+              }}
+            />
+          </label>
+        </div>
 
-            <div>
-              <label className="block mb-1">
-                Class <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="class"
-                value={formState.class}
-                onChange={handleChange}
-                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter your class (e.g., 9A)"
-                autoComplete="off"
-              />
-            </div>
-
-            <div className="flex gap-2 pt-4">
-              <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="flex-1 p-2 border rounded hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={!formState.name || !formState.class || !selectedTopic}
-                className="flex-1 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </form>
+        <div>
+          <button
+            onClick={handleSubmitWithAnimation}
+            style={{
+              backgroundColor: '#2563eb',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              marginRight: '10px'
+            }}
+          >
+            Submit
+          </button>
+          <button
+            onClick={() => setShowModal(false)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px'
+            }}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
