@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, Code, Eye, AlertCircle, CheckCircle, Timer, Save } from 'lucide-react';
-import SubmitModal from './SubmitModal';
+import { Send, Code, Eye, AlertCircle, CheckCircle, Save } from 'lucide-react';
 
 const AssessmentPlatform = () => {
   // State Definitions
@@ -38,7 +37,6 @@ body {
   const [studentClass, setStudentClass] = useState('');
   const [selectedTopic, setSelectedTopic] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
-  const [timeLeft, setTimeLeft] = useState(60 * 60);
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,30 +65,6 @@ body {
 
  // return () => clearTimeout(timeoutId);
 //}, [htmlCode, cssCode, selectedTopic]);
-
-// Timer Effect
-useEffect(() => {
-  const timer = setInterval(() => {
-    setTimeLeft((prev) => {
-      if (prev <= 0) {
-        clearInterval(timer);
-        setShowModal(true);
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
-
-  return () => clearInterval(timer);
-}, []);
-
-// Helper Functions
-const formatTime = (seconds) => {
-  const hrs = Math.floor(seconds / 3600);
-  const mins = Math.floor((seconds % 3600) / 60);
-  const secs = seconds % 60;
-  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
 
 const validateForm = () => {
   const errors = {};
@@ -158,8 +132,12 @@ const handleModalSubmit = (name, classValue) => {
   handleSubmitWithAnimation();
 };
 
-// Find your current SubmitModal component and replace it with this bare-bones version
 const SubmitModal = () => {
+  // Move useState hooks to the top
+  const [localName, setLocalName] = useState('');
+  const [localClass, setLocalClass] = useState('');
+
+  // Then do the conditional return
   if (!showModal) return null;
 
   return (
@@ -189,7 +167,8 @@ const SubmitModal = () => {
             Name:
             <input
               type="text"
-              onChange={(e) => setStudentName(e.target.value)}
+              value={localName}
+              onChange={(e) => setLocalName(e.target.value)}
               style={{
                 width: '100%',
                 padding: '8px',
@@ -205,7 +184,8 @@ const SubmitModal = () => {
             Class:
             <input
               type="text"
-              onChange={(e) => setStudentClass(e.target.value)}
+              value={localClass}
+              onChange={(e) => setLocalClass(e.target.value)}
               style={{
                 width: '100%',
                 padding: '8px',
@@ -218,13 +198,19 @@ const SubmitModal = () => {
 
         <div>
           <button
-            onClick={handleSubmitWithAnimation}
+            onClick={() => {
+              setStudentName(localName);
+              setStudentClass(localClass);
+              handleSubmitWithAnimation();
+            }}
+            disabled={!localName || !localClass || !selectedTopic}
             style={{
               backgroundColor: '#2563eb',
               color: 'white',
               padding: '8px 16px',
               borderRadius: '4px',
-              marginRight: '10px'
+              marginRight: '10px',
+              opacity: (!localName || !localClass || !selectedTopic) ? '0.5' : '1'
             }}
           >
             Submit
@@ -272,12 +258,7 @@ return (
           )}
         </div>
         <div className="flex items-center gap-4">
-          {/* Timer Display */}
-          <div className={`flex items-center gap-2 px-4 py-2 rounded-lg 
-            ${timeLeft < 300 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'}`}>
-            <Timer className="w-5 h-5" />
-            <span className="font-mono font-bold">{formatTime(timeLeft)}</span>
-          </div>
+         
           
           {/* Auto-save Status */}
           {autoSaveStatus && (
@@ -369,12 +350,7 @@ return (
       </div>
     </main>
 
-    <SubmitModal 
-  isOpen={showModal}
-  onClose={() => setShowModal(false)}
-  onSubmit={handleModalSubmit}
-  selectedTopic={selectedTopic}
-/>
+    {showModal && <SubmitModal />}
   </div>
 );
 };
