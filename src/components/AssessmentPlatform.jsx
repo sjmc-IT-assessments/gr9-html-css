@@ -52,20 +52,20 @@ body {
   };
   //Functions & Submit modal
 // Auto-save Effect with debounce
-useEffect(() => {
-  const timeoutId = setTimeout(() => {
-    localStorage.setItem('assessment-data', JSON.stringify({
-      htmlCode,
-      cssCode,
-      selectedTopic,
-      lastSaved: new Date().toISOString()
-    }));
-    setAutoSaveStatus('Saved');
-    setTimeout(() => setAutoSaveStatus(''), 2000);
-  }, 1000);
+//useEffect(() => {
+  //const timeoutId = setTimeout(() => {
+   // localStorage.setItem('assessment-data', JSON.stringify({
+     // htmlCode,
+      //cssCode,
+     // selectedTopic,
+    //  lastSaved: new Date().toISOString()
+   // }));
+  //  setAutoSaveStatus('Saved');
+ //   setTimeout(() => setAutoSaveStatus(''), 2000);
+//  }, 1000);
 
-  return () => clearTimeout(timeoutId);
-}, [htmlCode, cssCode, selectedTopic]);
+ // return () => clearTimeout(timeoutId);
+//}, [htmlCode, cssCode, selectedTopic]);
 
 // Timer Effect
 useEffect(() => {
@@ -152,7 +152,6 @@ const handleSubmitWithAnimation = () => {
   }, 1000);
 };
 
-// Replace the entire SubmitModal component with this version
 const SubmitModal = () => {
   // Local state with simpler structure
   const [formState, setFormState] = useState({
