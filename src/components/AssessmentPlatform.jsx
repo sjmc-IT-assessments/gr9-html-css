@@ -52,29 +52,24 @@ body {
 
 
   const validateForm = () => {
-    console.log('Validating form with:', {
-      name: studentName,
-      class: studentClass,
-      topic: selectedTopic,
-      html: htmlCode.length,
-      css: cssCode.length
-    });
     const errors = {};
-    if (!studentName || !studentName.trim()) errors.name = 'Name is required';
-    if (!studentClass || !studentClass.trim()) errors.class = 'Class is required';
+    
+    // Log current values for debugging
+    console.log('Current values:', {
+      studentName,
+      studentClass,
+      selectedTopic,
+      htmlLength: htmlCode?.length,
+      cssLength: cssCode?.length
+    });
+  
+    // Check for empty values
+    if (!studentName) errors.name = 'Name is required';
+    if (!studentClass) errors.class = 'Class is required';
     if (!selectedTopic) errors.topic = 'Topic selection is required';
-
-    if (!htmlCode || htmlCode.trim() === '') {
-      errors.html = 'HTML code is required';
-    }
-    if (!cssCode || cssCode.trim() === '') {
-      errors.css = 'CSS code is required';
-    }
   
     setValidationErrors(errors);
-    const isValid = Object.keys(errors).length === 0;
-    console.log('Validation result:', isValid, errors);
-    return isValid;
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async () => {
@@ -144,12 +139,54 @@ const handleModalSubmit = (name, classValue) => {
 };
 
 const SubmitModal = () => {
-  // Move useState hooks to the top
   const [localName, setLocalName] = useState('');
   const [localClass, setLocalClass] = useState('');
 
-  // Then do the conditional return
-  if (!showModal) return null;
+  const handleModalSubmit = () => {
+    if (!localName || !localClass || !selectedTopic) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    const confirmed = window.confirm(`Are you sure you want to submit?
+Name: ${localName}
+Class: ${localClass}
+Topic: ${selectedTopic}
+
+Your code will be submitted and this action cannot be undone.`);
+
+    if (confirmed) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GOOGLE_FORM_BASE_URL;
+      form.target = '_blank';
+
+      // Add fields
+      const fields = {
+        [FORM_FIELDS.name]: localName,
+        [FORM_FIELDS.class]: localClass,
+        [FORM_FIELDS.topic]: selectedTopic,
+        [FORM_FIELDS.html]: htmlCode,
+        [FORM_FIELDS.css]: cssCode
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      // Submit form
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+      
+      setShowModal(false);
+      alert('Your work has been submitted successfully!');
+    }
+  };
 
   return (
     <div style={{
@@ -209,24 +246,19 @@ const SubmitModal = () => {
 
         <div>
           <button
-        onClick={() => {
-          console.log('Submit clicked with:', localName, localClass);
-           setStudentName(localName);
-          setStudentClass(localClass);
-          handleSubmit();
-        }}
-        disabled={!localName || !localClass || !selectedTopic}
-        style={{
-          backgroundColor: '#2563eb',
-          color: 'white',
-          padding: '8px 16px',
-          borderRadius: '4px',
-          marginRight: '10px',
-          opacity: (!localName || !localClass || !selectedTopic) ? '0.5' : '1'
-        }}
-      >
-  Submit
-</button>
+            onClick={handleModalSubmit}
+            disabled={!localName || !localClass || !selectedTopic}
+            style={{
+              backgroundColor: '#2563eb',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              marginRight: '10px',
+              opacity: (!localName || !localClass || !selectedTopic) ? '0.5' : '1'
+            }}
+          >
+            Submit
+          </button>
           <button
             onClick={() => setShowModal(false)}
             style={{
