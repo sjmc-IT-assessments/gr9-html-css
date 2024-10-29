@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Send, Code, Eye, AlertCircle, CheckCircle, Timer, Save } from 'lucide-react';
+import SubmitModal from './SubmitModal';
 
 const AssessmentPlatform = () => {
   // State Definitions
@@ -144,12 +145,10 @@ Your code will be submitted and this action cannot be undone.`);
   }
 };
 
-const handleSubmitWithAnimation = () => {
-  setIsSubmitting(true);
-  setTimeout(() => {
-    handleSubmit();
-    setIsSubmitting(false);
-  }, 1000);
+const handleModalSubmit = (name, classValue) => {
+  setStudentName(name);
+  setStudentClass(classValue);
+  handleSubmitWithAnimation();
 };
 
 const SubmitModal = () => {
@@ -372,7 +371,12 @@ return (
       </div>
     </main>
 
-    {showModal && <SubmitModal />}
+    <SubmitModal 
+  isOpen={showModal}
+  onClose={() => setShowModal(false)}
+  onSubmit={handleModalSubmit}
+  selectedTopic={selectedTopic}
+/>
   </div>
 );
 };
