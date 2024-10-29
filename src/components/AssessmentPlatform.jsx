@@ -14,7 +14,7 @@ const AssessmentPlatform = () => {
     <!-- Add your content here -->
 </body>
 </html>`);
-  }
+
   const [cssCode, setCssCode] = useState(`/* Add your styles here */
 body {
     margin: 0;
@@ -50,7 +50,7 @@ body {
     html: 'entry.1760210967',
     css: 'entry.179417740'
   };
- //Part 2 
+  //Functions & Submit modal
 // Auto-save Effect with debounce
 useEffect(() => {
   const timeoutId = setTimeout(() => {
@@ -66,6 +66,7 @@ useEffect(() => {
 
   return () => clearTimeout(timeoutId);
 }, [htmlCode, cssCode, selectedTopic]);
+
 // Timer Effect
 useEffect(() => {
   const timer = setInterval(() => {
@@ -116,30 +117,30 @@ Topic: ${selectedTopic}
 Your code will be submitted and this action cannot be undone.`);
 
   if (confirmed) {
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = GOOGLE_FORM_BASE_URL;
-      form.target = '_blank';
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = GOOGLE_FORM_BASE_URL;
+    form.target = '_blank';
 
-      const addField = (name, value) => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = name;
-          input.value = value;
-          form.appendChild(input);
-      };
+    const addField = (name, value) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    };
 
-      addField(FORM_FIELDS.name, studentName);
-      addField(FORM_FIELDS.class, studentClass);
-      addField(FORM_FIELDS.topic, selectedTopic);
-      addField(FORM_FIELDS.html, htmlCode);
-      addField(FORM_FIELDS.css, cssCode);
+    addField(FORM_FIELDS.name, studentName);
+    addField(FORM_FIELDS.class, studentClass);
+    addField(FORM_FIELDS.topic, selectedTopic);
+    addField(FORM_FIELDS.html, htmlCode);
+    addField(FORM_FIELDS.css, cssCode);
 
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-      
-      setShowModal(false);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+    
+    setShowModal(false);
   }
 };
 
@@ -151,78 +152,103 @@ const handleSubmitWithAnimation = () => {
   }, 1000);
 };
 
+// Replace the entire SubmitModal component with this version
 const SubmitModal = () => {
-  const [inputName, setInputName] = useState('');
-  const [inputClass, setInputClass] = useState('');
+  // Local state with simpler structure
+  const [formState, setFormState] = useState({
+    name: studentName || '',
+    class: studentClass || ''
+  });
 
-  const closeModal = () => {
-      setShowModal(false);
+  // Single handler for both inputs
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleNameChange = (e) => {
-      setInputName(e.target.value);
-  };
-
-  const handleClassChange = (e) => {
-      setInputClass(e.target.value);
-  };
-
-  const handleSubmit = () => {
-      if (inputName && inputClass) {
-          setStudentName(inputName);
-          setStudentClass(inputClass);
-          handleSubmitWithAnimation();
-      }
+  // Submit handler
+  const handleModalSubmit = (e) => {
+    e.preventDefault(); // Prevent form submission
+    if (formState.name && formState.class) {
+      setStudentName(formState.name);
+      setStudentClass(formState.class);
+      handleSubmitWithAnimation();
+    }
   };
 
   return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h2 className="text-xl font-bold mb-4">Submit Your Work</h2>
-              
-              <div className="space-y-4">
-                  <div>
-                      <label className="block mb-1">Full Name</label>
-                      <input
-                          type="text"
-                          value={inputName}
-                          onChange={handleNameChange}
-                          className="w-full p-2 border rounded"
-                          placeholder="Enter your full name"
-                      />
-                  </div>
-
-                  <div>
-                      <label className="block mb-1">Class</label>
-                      <input
-                          type="text"
-                          value={inputClass}
-                          onChange={handleClassChange}
-                          className="w-full p-2 border rounded"
-                          placeholder="Enter your class (e.g., 9A)"
-                      />
-                  </div>
-
-                  <div className="flex gap-2 pt-4">
-                      <button
-                          onClick={closeModal}
-                          className="flex-1 p-2 border rounded"
-                      >
-                          Cancel
-                      </button>
-                      <button
-                          onClick={handleSubmit}
-                          className="flex-1 p-2 bg-blue-600 text-white rounded"
-                      >
-                          Submit
-                      </button>
-                  </div>
-              </div>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <form onSubmit={handleModalSubmit}>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Submit Your Work</h2>
+            <button
+              type="button"
+              onClick={() => setShowModal(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ×
+            </button>
           </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-1">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formState.name}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your full name"
+                autoComplete="off"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">
+                Class <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="class"
+                value={formState.class}
+                onChange={handleChange}
+                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your class (e.g., 9A)"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="flex-1 p-2 border rounded hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={!formState.name || !formState.class || !selectedTopic}
+                className="flex-1 p-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
   );
-  //Part 3
-  return ( 
+};
+//Display/preview
+return (
   <div className="min-h-screen bg-gray-50">
     {/* Header with Timer */}
     <header className="bg-white border-b shadow-sm p-4">
@@ -341,15 +367,15 @@ const SubmitModal = () => {
                 </html>`}
               title="preview"
               className="w-full h-full"
-              />
-              </div>
-            </div>
+            />
           </div>
-        </main>
-  
-        {showModal && <SubmitModal />}
-    </div>
-  );
-};// closing the AssessmentPlatform component
+        </div>
+      </div>
+    </main>
+
+    {showModal && <SubmitModal />}
+  </div>
+);
+};
 
 export default AssessmentPlatform;
