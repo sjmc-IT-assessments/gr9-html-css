@@ -43,47 +43,50 @@ body {
   // Google Form Configuration
   const GOOGLE_FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdyEaF1oM6lPWFejuOX3BDMtxD6R7z6TjwKImzs4StcovJbFA/formResponse';
   const FORM_FIELDS = {
-    name: 'entry.1120732995',
-    class: 'entry.1336450333',
-    topic: 'entry.1421884587',
-    html: 'entry.1760210967',
-    css: 'entry.179417740'
+      name: 'entry.1120732995',
+      class: 'entry.1336450333',
+      topic: 'entry.1421884587',
+      html: 'entry.1760210967',
+      css: 'entry.179417740'
   };
-  //Functions & Submit modal
-// Auto-save Effect with debounce
-//useEffect(() => {
-  //const timeoutId = setTimeout(() => {
-   // localStorage.setItem('assessment-data', JSON.stringify({
-     // htmlCode,
-      //cssCode,
-     // selectedTopic,
-    //  lastSaved: new Date().toISOString()
-   // }));
-  //  setAutoSaveStatus('Saved');
- //   setTimeout(() => setAutoSaveStatus(''), 2000);
-//  }, 1000);
 
- // return () => clearTimeout(timeoutId);
-//}, [htmlCode, cssCode, selectedTopic]);
 
-const validateForm = () => {
-  const errors = {};
-  if (!studentName.trim()) errors.name = 'Name is required';
-  if (!studentClass.trim()) errors.class = 'Class is required';
-  if (!selectedTopic) errors.topic = 'Topic selection is required';
-  if (!htmlCode.trim() || htmlCode === '<!-- Add your content here -->') {
-    errors.html = 'HTML code is required';
-  }
-  if (!cssCode.trim() || cssCode === '/* Add your styles here */') {
-    errors.css = 'CSS code is required';
-  }
-  setValidationErrors(errors);
-  return Object.keys(errors).length === 0;
-};
+  const validateForm = () => {
+    console.log('Validating form with:', {
+      name: studentName,
+      class: studentClass,
+      topic: selectedTopic,
+      html: htmlCode.length,
+      css: cssCode.length
+    });
+    const errors = {};
+    if (!studentName || !studentName.trim()) errors.name = 'Name is required';
+    if (!studentClass || !studentClass.trim()) errors.class = 'Class is required';
+    if (!selectedTopic) errors.topic = 'Topic selection is required';
 
-const handleSubmit = async () => {
-  if (!validateForm()) return;
+    if (!htmlCode || htmlCode.trim() === '') {
+      errors.html = 'HTML code is required';
+    }
+    if (!cssCode || cssCode.trim() === '') {
+      errors.css = 'CSS code is required';
+    }
+  
+    setValidationErrors(errors);
+    const isValid = Object.keys(errors).length === 0;
+    console.log('Validation result:', isValid, errors);
+    return isValid;
+  };
 
+  const handleSubmit = async () => {
+    console.log('HandleSubmit called with:', {
+      name: studentName,
+      class: studentClass,
+      topic: selectedTopic
+    });
+    if (!validateForm()) {
+      console.log('Validation failed');
+      return;
+    }
   const confirmed = window.confirm(`Are you sure you want to submit?
 Name: ${studentName}
 Class: ${studentClass}
@@ -91,7 +94,9 @@ Topic: ${selectedTopic}
 
 Your code will be submitted and this action cannot be undone.`);
 
-  if (confirmed) {
+if (confirmed) {
+  try {
+    // Create and submit form
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = GOOGLE_FORM_BASE_URL;
@@ -116,8 +121,14 @@ Your code will be submitted and this action cannot be undone.`);
     document.body.removeChild(form);
     
     setShowModal(false);
+    window.alert('Your work has been submitted successfully!');
+  } catch (error) {
+    console.error('Submission error:', error);
+    window.alert('Error submitting form. Please try again.');
   }
+}
 };
+    
 const handleSubmitWithAnimation = () => {
   setIsSubmitting(true);
   setTimeout(() => {
@@ -198,23 +209,24 @@ const SubmitModal = () => {
 
         <div>
           <button
-            onClick={() => {
-              setStudentName(localName);
-              setStudentClass(localClass);
-              handleSubmitWithAnimation();
-            }}
-            disabled={!localName || !localClass || !selectedTopic}
-            style={{
-              backgroundColor: '#2563eb',
-              color: 'white',
-              padding: '8px 16px',
-              borderRadius: '4px',
-              marginRight: '10px',
-              opacity: (!localName || !localClass || !selectedTopic) ? '0.5' : '1'
-            }}
-          >
-            Submit
-          </button>
+        onClick={() => {
+          console.log('Submit clicked with:', localName, localClass);
+           setStudentName(localName);
+          setStudentClass(localClass);
+          handleSubmit();
+        }}
+        disabled={!localName || !localClass || !selectedTopic}
+        style={{
+          backgroundColor: '#2563eb',
+          color: 'white',
+          padding: '8px 16px',
+          borderRadius: '4px',
+          marginRight: '10px',
+          opacity: (!localName || !localClass || !selectedTopic) ? '0.5' : '1'
+        }}
+      >
+  Submit
+</button>
           <button
             onClick={() => setShowModal(false)}
             style={{
