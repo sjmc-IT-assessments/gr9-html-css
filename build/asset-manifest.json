@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/sjmcI-IT-assessments/static/css/main.2cc3beeb.css",
-    "main.js": "/sjmcI-IT-assessments/static/js/main.a2b0858b.js",
+    "main.css": "/sjmcI-IT-assessments/static/css/main.157f1ba8.css",
+    "main.js": "/sjmcI-IT-assessments/static/js/main.3eaebe4a.js",
     "index.html": "/sjmcI-IT-assessments/index.html",
-    "main.2cc3beeb.css.map": "/sjmcI-IT-assessments/static/css/main.2cc3beeb.css.map",
-    "main.a2b0858b.js.map": "/sjmcI-IT-assessments/static/js/main.a2b0858b.js.map"
+    "main.157f1ba8.css.map": "/sjmcI-IT-assessments/static/css/main.157f1ba8.css.map",
+    "main.3eaebe4a.js.map": "/sjmcI-IT-assessments/static/js/main.3eaebe4a.js.map"
   },
   "entrypoints": [
-    "static/css/main.2cc3beeb.css",
-    "static/js/main.a2b0858b.js"
+    "static/css/main.157f1ba8.css",
+    "static/js/main.3eaebe4a.js"
   ]
 }
