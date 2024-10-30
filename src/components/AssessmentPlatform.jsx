@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Code, Eye, AlertCircle } from 'lucide-react';
+import { Send, Code, Eye } from 'lucide-react';
 
 const AssessmentPlatform = () => {
   // State Definitions
@@ -148,7 +148,8 @@ body {
             <select
               value={selectedTopic}
               onChange={(e) => setSelectedTopic(e.target.value)}
-              className="border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className={`border rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-200 
+                ${validationErrors.topic ? 'border-red-500' : ''}`}
             >
               <option value="">Select a Topic</option>
               {topics.map(topic => (
@@ -157,8 +158,12 @@ body {
                 </option>
               ))}
             </select>
+            {validationErrors.topic && (
+              <span className="text-red-500 text-sm">
+                {validationErrors.topic}
+              </span>
+            )}
           </div>
-          
           <button
             onClick={() => setShowModal(true)}
             className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
