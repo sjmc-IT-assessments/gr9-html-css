@@ -1,7 +1,7 @@
 {
-  "name": "assessment-platform",
+ "name": "gr9-html-css",
   "version": "0.1.0",
-  "homepage": "https://mrcooksit.github.io/sjmcI-IT-assessments",
+  "homepage": "https://sjmc-it-assessments.github.io/gr9-html-css",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
