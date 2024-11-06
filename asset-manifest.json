@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/sjmcI-IT-assessments/static/css/main.825b1682.css",
-    "main.js": "/sjmcI-IT-assessments/static/js/main.0e0b2207.js",
-    "index.html": "/sjmcI-IT-assessments/index.html",
-    "main.825b1682.css.map": "/sjmcI-IT-assessments/static/css/main.825b1682.css.map",
-    "main.0e0b2207.js.map": "/sjmcI-IT-assessments/static/js/main.0e0b2207.js.map"
+    "main.css": "/gr9-html-css/static/css/main.825b1682.css",
+    "main.js": "/gr9-html-css/static/js/main.0e0b2207.js",
+    "index.html": "/gr9-html-css/index.html",
+    "main.825b1682.css.map": "/gr9-html-css/static/css/main.825b1682.css.map",
+    "main.0e0b2207.js.map": "/gr9-html-css/static/js/main.0e0b2207.js.map"
   },
   "entrypoints": [
     "static/css/main.825b1682.css",
