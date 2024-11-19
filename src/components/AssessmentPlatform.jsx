@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, Code, Eye, Moon, Sun } from 'lucide-react';
+import LandingPage from './LandingPage';
 
 const DarkModeToggle = ({ darkMode, setDarkMode }) => (
   <div className={`fixed bottom-4 right-4 flex items-center gap-2 ${darkMode ? 'text-gray-200' : 'text-gray-700'}`}>
@@ -109,6 +110,7 @@ const AnimatedBMO = () => (
   </div>
 );
 const AssessmentPlatform = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('html');
   const [darkMode, setDarkMode] = useState(false);
   const [htmlCode, setHtmlCode] = useState(`<!DOCTYPE html>
@@ -135,7 +137,6 @@ body {
   const [isDragging, setIsDragging] = useState(false);
   const [splitPosition, setSplitPosition] = useState(50);
 
-  // Constants
   const TOPIC = "Digital Citizenship: The Digital Dilemma";
   const GOOGLE_FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdyEaF1oM6lPWFejuOX3BDMtxD6R7z6TjwKImzs4StcovJbFA/formResponse';
   const FORM_FIELDS = {
@@ -218,6 +219,9 @@ body {
         } finally {
           setSubmitting(false);
         }
+      }
+      if (!isAuthenticated) {
+        return <LandingPage onAccessGranted={() => setIsAuthenticated(true)} />;
       }
     };
 
