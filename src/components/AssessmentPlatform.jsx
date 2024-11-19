@@ -136,7 +136,10 @@ body {
   const [showModal, setShowModal] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [splitPosition, setSplitPosition] = useState(50);
-
+  
+  if (!isAuthenticated) {
+    return <LandingPage onAccessGranted={() => setIsAuthenticated(true)} />;
+  }
   const TOPIC = "Digital Citizenship: The Digital Dilemma";
   const GOOGLE_FORM_BASE_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdyEaF1oM6lPWFejuOX3BDMtxD6R7z6TjwKImzs4StcovJbFA/formResponse';
   const FORM_FIELDS = {
@@ -219,9 +222,6 @@ body {
         } finally {
           setSubmitting(false);
         }
-      }
-      if (!isAuthenticated) {
-        return <LandingPage onAccessGranted={() => setIsAuthenticated(true)} />;
       }
     };
 
