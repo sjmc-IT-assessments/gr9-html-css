@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, ChevronRight, Lock } from 'lucide-react';
 
@@ -6,30 +6,16 @@ const PremiumLanding = ({ onAccessGranted }) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [currentParticleCount, setCurrentParticleCount] = useState(0);
 
-    // Create particles with different speeds and distances
-    const particles = Array.from({ length: 50 }).map(() => ({
-        speed: Math.random() * 0.1 + 0.05,
-        distance: Math.random() * 100 + 50,
-        initialOffset: Math.random() * 360, // Random starting position around cursor
-    }));
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
+    // Increased number of particles
+    const particles = Array.from({ length: 100 }); // Doubled the particles
 
     const checkPassword = async (e) => {
         e.preventDefault();
         if (password === 'DigitalCitizen2024') {
             setLoading(true);
-            setCurrentParticleCount(200);
+            setCurrentParticleCount(300); // Increased explosion particles
             await new Promise(r => setTimeout(r, 2000));
             onAccessGranted();
         } else {
@@ -45,28 +31,43 @@ const PremiumLanding = ({ onAccessGranted }) => {
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-30 animate-gradient" />
 
-            {/* Cursor-following particles */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {particles.map((particle, i) => (
+            {/* Floating particles with better distribution */}
+            <div className="absolute inset-0">
+                {particles.map((_, i) => (
                     <motion.div
                         key={i}
                         className="absolute w-2 h-2 bg-white rounded-full"
                         animate={{
-                            x: mousePosition.x + Math.cos((Date.now() * particle.speed) + particle.initialOffset) * particle.distance,
-                            y: mousePosition.y + Math.sin((Date.now() * particle.speed) + particle.initialOffset) * particle.distance,
+                            x: [
+                                Math.random() * window.innerWidth,
+                                Math.random() * window.innerWidth + Math.random() * 100 - 50
+                            ],
+                            y: [
+                                Math.random() * window.innerHeight,
+                                Math.random() * window.innerHeight + Math.random() * 100 - 50
+                            ],
+                            scale: [
+                                Math.random() * 0.5 + 0.5,
+                                Math.random() * 0.5 + 0.5
+                            ],
                             opacity: [0.2, 0.5, 0.2],
-                            scale: [0.8, 1.2, 0.8],
                         }}
                         transition={{
-                            duration: 2,
+                            duration: Math.random() * 10 + 10, // More varied durations
                             repeat: Infinity,
-                            ease: "linear",
+                            repeatType: "reverse",
+                            ease: "easeInOut",
+                        }}
+                        style={{
+                            // Better initial distribution across the screen
+                            left: `${(i % 10) * 10}%`,
+                            top: `${Math.floor(i / 10) * 10}%`,
                         }}
                     />
                 ))}
             </div>
 
-            {/* 3D Card Container */}
+            {/* Rest of your component stays the same */}
             <div className="relative z-10 flex items-center justify-center min-h-screen perspective-1000">
                 <motion.div
                     className="form-container relative bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl w-[480px]"
@@ -79,7 +80,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
 
                     {/* Content */}
                     <div className="relative z-10 space-y-6">
-                        {/* School Logo - Replace src with your school logo */}
+                        {/* School Logo */}
                         <motion.div
                             className="flex justify-center mb-8"
                             animate={{ rotate: [0, 5, -5, 0] }}
@@ -194,15 +195,9 @@ const PremiumLanding = ({ onAccessGranted }) => {
                 ))}
             </AnimatePresence>
 
-            {/* Footer credit */}
-            <motion.div
-                className="absolute bottom-4 w-full text-center text-white/50 text-sm"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-            >
-                Crafted with precision for Digital Technology
-            </motion.div>
+            <div className="absolute bottom-4 text-white/70 text-sm italic z-10">
+                Designed, Set and Developed with love❤️  Mr Coetzee
+            </div>
 
             <style jsx>{`
         @keyframes border-glow {
@@ -234,6 +229,9 @@ const PremiumLanding = ({ onAccessGranted }) => {
           40%, 60% { transform: translate3d(4px, 0, 0); }
         }
       `}</style>
+            <div className="absolute bottom-4 text-white/70 text-sm italic z-10">
+                Designed, Set and Developed with love❤️  Mr Coetzee
+            </div>
         </div>
     );
 };
