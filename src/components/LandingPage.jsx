@@ -82,14 +82,24 @@ const PremiumLanding = ({ onAccessGranted }) => {
                     <div className="relative z-10 space-y-6">
                         {/* School Logo */}
                         <motion.div
-                            className="flex justify-center mb-8"
-                            animate={{ rotate: [0, 5, -5, 0] }}
-                            transition={{ duration: 6, repeat: Infinity }}
-                        >
-                            <div className="w-32 h-32 rounded-full bg-white/90 p-2 shadow-lg flex items-center justify-center">
-                                <div className="text-4xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 text-transparent bg-clip-text">
-                                    SJMC
-                                </div>
+                            className="w-32 h-32 rounded-full bg-white/90 p-2 shadow-lg flex items-center justify-center">
+                            {/* Try loading the logo first */}
+                            <img
+                                src="./logo.png"
+                                alt="School Logo"
+                                className="w-full h-full object-contain hidden"
+                                onLoad={(e) => e.target.classList.remove('hidden')}
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    document.getElementById('backup-text').style.display = 'block';
+                                }}
+                            />
+                            {/* Backup text that shows if image fails */}
+                            <div
+                                id="backup-text"
+                                className="text-4xl font-bold text-blue-600 hidden"
+                            >
+                                SJMC
                             </div>
                         </motion.div>
 
