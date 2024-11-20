@@ -82,20 +82,24 @@ const PremiumLanding = ({ onAccessGranted }) => {
                     <div className="relative z-10 space-y-6">
                         {/* School Logo */}
                         <motion.div
-                            className="flex justify-center mb-8"
-                            animate={{ rotate: [0, 5, -5, 0] }}
-                            transition={{ duration: 6, repeat: Infinity }}
-                        >
-                            <div className="w-32 h-32 rounded-full bg-white/90 p-2 shadow-lg flex items-center justify-center">
-                                <img
-                                    src="/logo.png"
-                                    alt="School Logo"
-                                    className="w-full h-full object-contain"
-                                    onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src = '/api/placeholder/128/128';
-                                    }}
-                                />
+                          className="w-32 h-32 rounded-full bg-white/90 p-2 shadow-lg flex items-center justify-center">
+                            {/* Try loading the logo first */}
+                            <img
+                                src="/logo.png"
+                                alt="School Logo"
+                                className="w-full h-full object-contain hidden"
+                                onLoad={(e) => e.target.classList.remove('hidden')}
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    document.getElementById('backup-text').style.display = 'block';
+                                }}
+                            />
+                            {/* Backup text that shows if image fails */}
+                            <div
+                                id="backup-text"
+                                className="text-4xl font-bold text-blue-600 hidden"
+                            >
+                                SJMC
                             </div>
                         </motion.div>
 
@@ -167,33 +171,35 @@ const PremiumLanding = ({ onAccessGranted }) => {
                         </form>
                     </div>
                 </motion.div>
-            </div>
+            </div >
 
             {/* Success particles explosion */}
-            <AnimatePresence>
-                {Array.from({ length: currentParticleCount }).map((_, i) => (
-                    <motion.div
-                        key={`success-particle-${i}`}
-                        className="absolute w-2 h-2 bg-white rounded-full"
-                        initial={{
-                            x: window.innerWidth / 2,
-                            y: window.innerHeight / 2,
-                            scale: 0
-                        }}
-                        animate={{
-                            x: Math.random() * window.innerWidth,
-                            y: Math.random() * window.innerHeight,
-                            scale: Math.random() * 2,
-                            opacity: 0
-                        }}
-                        exit={{ opacity: 0 }}
-                        transition={{
-                            duration: 2,
-                            ease: "easeOut"
-                        }}
-                    />
-                ))}
-            </AnimatePresence>
+            < AnimatePresence >
+                {
+                    Array.from({ length: currentParticleCount }).map((_, i) => (
+                        <motion.div
+                            key={`success-particle-${i}`}
+                            className="absolute w-2 h-2 bg-white rounded-full"
+                            initial={{
+                                x: window.innerWidth / 2,
+                                y: window.innerHeight / 2,
+                                scale: 0
+                            }}
+                            animate={{
+                                x: Math.random() * window.innerWidth,
+                                y: Math.random() * window.innerHeight,
+                                scale: Math.random() * 2,
+                                opacity: 0
+                            }}
+                            exit={{ opacity: 0 }}
+                            transition={{
+                                duration: 2,
+                                ease: "easeOut"
+                            }}
+                        />
+                    ))
+                }
+            </AnimatePresence >
 
             <div className="absolute bottom-4 text-white/70 text-sm italic z-10">
                 Designed, Set and Developed with love❤️  Mr Coetzee
@@ -232,7 +238,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
             <div className="absolute bottom-4 text-white/70 text-sm italic z-10">
                 Designed, Set and Developed with love❤️  Mr Coetzee
             </div>
-        </div>
+        </div >
     );
 };
 
