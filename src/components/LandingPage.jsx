@@ -9,11 +9,11 @@ const PremiumLanding = ({ onAccessGranted }) => {
     const [currentParticleCount, setCurrentParticleCount] = useState(0);
 
     // Increased number of particles
-    const particles = Array.from({ length: 600 }); // Doubled the particles
+    const particles = Array.from({ length: 2000 }); // Doubled the particles
 
     const checkPassword = async (e) => {
         e.preventDefault();
-        if (password === 'DigitalCitizen2024') {
+        if (password === 'PeppermintButler') {
             setLoading(true);
             setCurrentParticleCount(800); // Increased explosion particles
             await new Promise(r => setTimeout(r, 2000));
@@ -87,7 +87,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
                             <img
                                 src="logo.png"
                                 alt="School Logo"
-                                className="w-full h-full object-contain hidden"
+                                className="w-full h-full object-contain object-center mx-auto"
                                 onLoad={(e) => e.target.classList.remove('hidden')}
                                 onError={(e) => {
                                     e.target.style.display = 'none';
@@ -109,7 +109,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
                         >
-                            Digital Assessment
+                            Digital Technology Assessment
                         </motion.h1>
 
                         <motion.p
@@ -118,7 +118,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.3 }}
                         >
-                            Grade 9 HTML & CSS Challenge
+                            Grade 9 HTML & CSS
                         </motion.p>
 
                         <form onSubmit={checkPassword} className="space-y-4">
@@ -201,6 +201,9 @@ const PremiumLanding = ({ onAccessGranted }) => {
                 }
             </AnimatePresence >
 
+            <div className="absolute bottom-4 w-full text-center text-white/70 text-sm italic z-10">
+                Designed, Set and Developed with love❤️  Mr Coetzee
+            </div>
             <style jsx>{`
         @keyframes border-glow {
             0%, 100% { opacity: 0.5; }
@@ -231,9 +234,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
         `}</style>
-            <div className="absolute bottom-4 w-full text-center text-white/70 text-sm italic z-10">
-                Designed, Set and Developed with love❤️  Mr Coetzee
-            </div>
+
         </div >
     );
 };
