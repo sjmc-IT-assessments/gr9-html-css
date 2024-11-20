@@ -9,13 +9,13 @@ const PremiumLanding = ({ onAccessGranted }) => {
     const [currentParticleCount, setCurrentParticleCount] = useState(0);
 
     // Increased number of particles
-    const particles = Array.from({ length: 100 }); // Doubled the particles
+    const particles = Array.from({ length: 600 }); // Doubled the particles
 
     const checkPassword = async (e) => {
         e.preventDefault();
         if (password === 'DigitalCitizen2024') {
             setLoading(true);
-            setCurrentParticleCount(300); // Increased explosion particles
+            setCurrentParticleCount(800); // Increased explosion particles
             await new Promise(r => setTimeout(r, 2000));
             onAccessGranted();
         } else {
@@ -85,7 +85,7 @@ const PremiumLanding = ({ onAccessGranted }) => {
                             className="w-32 h-32 rounded-full bg-white/90 p-2 shadow-lg flex items-center justify-center">
                             {/* Try loading the logo first */}
                             <img
-                                src="./logo.png"
+                                src="logo.png"
                                 alt="School Logo"
                                 className="w-full h-full object-contain hidden"
                                 onLoad={(e) => e.target.classList.remove('hidden')}
@@ -203,35 +203,35 @@ const PremiumLanding = ({ onAccessGranted }) => {
 
             <style jsx>{`
         @keyframes border-glow {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
         .animate-border-glow {
-          animation: border-glow 3s ease-in-out infinite;
+            animation: border-glow 3s ease-in-out infinite;
         }
         .animate-gradient {
-          background-size: 400% 400%;
-          animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
         }
         @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; }
         }
         .perspective-1000 {
-          perspective: 1000px;
+            perspective: 1000px;
         }
         .shake {
-          animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }   
         @keyframes shake {
-          10%, 90% { transform: translate3d(-1px, 0, 0); }
-          20%, 80% { transform: translate3d(2px, 0, 0); }
-          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-          40%, 60% { transform: translate3d(4px, 0, 0); }
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
-      `}</style>
-            <div className="absolute bottom-4 text-white/70 text-sm italic z-10">
+        `}</style>
+            <div className="absolute bottom-4 w-full text-center text-white/70 text-sm italic z-10">
                 Designed, Set and Developed with love❤️  Mr Coetzee
             </div>
         </div >
